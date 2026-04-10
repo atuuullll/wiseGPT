@@ -1,0 +1,11 @@
+google-generativeai==0.3.0
+python-dotenv==1.0.0
+requests==2.31.0
+flask==2.3.3
+pytest==7.4.0
+coverage==7.2.0
+langchain==0.0.318
+langchain-google-genai==0.0.7
+flasgger==0.9.7.1
+gunicorn==21.2.0
+python-dotenv==1.0.0

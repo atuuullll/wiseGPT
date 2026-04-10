@@ -1,0 +1,258 @@
+openapi: 3.0.0
+info:
+  title: LLM Content Generator API
+  description: Generate high-quality content using Google Gemini and LangChain
+  version: 1.0.0
+  contact:
+    name: Support
+    email: support@example.com
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:5000
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+paths:
+  /:
+    get:
+      summary: API Documentation
+      description: Get API documentation and available endpoints
+      operationId: getHome
+      responses:
+        '200':
+          description: API documentation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  version:
+                    type: string
+                  endpoints:
+                    type: object
+                  authentication:
+                    type: object
+                  example:
+                    type: object
+
+  /health:
+    get:
+      summary: Health Check
+      description: Check if the API is running
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  service:
+                    type: string
+                    example: LLM Content Generator
+
+  /generate:
+    post:
+      summary: Generate Content
+      description: Generate content using the specified topic and content type
+      operationId: generateContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - topic
+              properties:
+                topic:
+                  type: string
+                  maxLength: 500
+                  description: The topic to generate content about
+                  example: Artificial Intelligence
+                content_type:
+                  type: string
+                  description: Type of content to generate
+                  default: blog post
+                  example: blog post
+      responses:
+        '200':
+          description: Content generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  topic:
+                    type: string
+                  content_type:
+                    type: string
+                  content:
+                    type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '401':
+          description: Unauthorized - Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '429':
+          description: Too many requests - Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  retry_after:
+                    type: integer
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+      security:
+        - ApiKeyAuth: []
+
+  /generate-blog:
+    post:
+      summary: Generate Blog Post
+      description: Generate a blog post about a specific topic
+      operationId: generateBlog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - topic
+              properties:
+                topic:
+                  type: string
+                  maxLength: 500
+                  description: The topic for the blog post
+                  example: Python Programming
+      responses:
+        '200':
+          description: Blog post generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  topic:
+                    type: string
+                  content_type:
+                    type: string
+                    example: blog post
+                  content:
+                    type: string
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '429':
+          description: Rate limit exceeded
+        '500':
+          description: Internal server error
+      security:
+        - ApiKeyAuth: []
+
+  /generate-summary:
+    post:
+      summary: Generate Summary
+      description: Generate a technical summary about a specific topic
+      operationId: generateSummary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - topic
+              properties:
+                topic:
+                  type: string
+                  maxLength: 500
+                  description: The topic to summarize
+                  example: Machine Learning Fundamentals
+      responses:
+        '200':
+          description: Summary generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  topic:
+                    type: string
+                  content_type:
+                    type: string
+                    example: technical summary
+                  content:
+                    type: string
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '429':
+          description: Rate limit exceeded
+        '500':
+          description: Internal server error
+      security:
+        - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key required if REQUIRE_AUTH is enabled
+
+tags:
+  - name: Content Generation
+    description: API endpoints for generating content
+  - name: Utilities
+    description: Utility endpoints like health checks
+
+x-rate-limit:
+  description: Rate limiting configuration
+  requests-per-minute: 30
+  enabled-by-default: true
+  env-variable: REQUESTS_PER_MINUTE

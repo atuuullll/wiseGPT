@@ -1,0 +1,20 @@
+# Docker configurations
+
+*.log
+.env
+.env.local
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+logs/
+venv/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store
+*.swp
+*.swo
