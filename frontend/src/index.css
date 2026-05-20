@@ -129,6 +129,17 @@ html, body, #root {
   }
 }
 
+@keyframes waveform {
+  0%, 100% {
+    transform: scaleY(0.45);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleY(1.15);
+    opacity: 1;
+  }
+}
+
 @layer utilities {
   .animate-fadeIn {
     animation: fadeIn 0.5s ease-out;
